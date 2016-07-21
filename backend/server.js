@@ -44,5 +44,5 @@ app.get("/articles", function(req, res) {
   newArticle.createData = new Date();
 
   // inserting one new article
-  db.collection(ARTICLES_COLLECTION).finre
+  db.collection(ARTICLES_COLLECTION).fine
 })
