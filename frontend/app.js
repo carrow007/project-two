@@ -5,7 +5,7 @@ var goButton     = document.getElementById('goButton');
 var favButton    = document.getElementById('fav-button');
 var viewALl      = document.getElementById('view-all');
 var deleteFavs   = document.getElementById('delete-favs');
-var chosenDropDown = document.querySelector('#dropdown');
+var chosenDropDown = document.getElementById('dropdown');
 
   document.getElementById('goButton').addEventListener('click', function () {
     event.preventDefault();
@@ -13,14 +13,14 @@ var chosenDropDown = document.querySelector('#dropdown');
       console.log(chosenRadio)
     var endPointUrl       = "https://newsapi.org/v1/articles"
     var sourceQuery       = "?source=" + chosenDropDown.value;
-    var sortQuery         = "&sortBy" + chosenRadio.value;
+    var sortQuery         = "&sortBy=" + chosenRadio.value;
        console.log(chosenRadio.value)
     var apiPublicKeyQuery = "&apiKey=" + NEWS_API_KEY;
     var fullQuery         = endPointUrl + sourceQuery + sortQuery + apiPublicKeyQuery;
 
 
       if (chosenDropDown.value == 'bbcnews' && (chosenRadio.value == 'top' || chosenRadio.value == 'popular' || chosenRadio.value == 'latest')) {
-          console.log('is this working?')
+          console.log(fullQuery)
 
 
 
