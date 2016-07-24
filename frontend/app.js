@@ -2,11 +2,13 @@ window.onload = function () {
 
 var dropDown     = document.getElementById('dropdown');
 var goButton     = document.getElementById('goButton');
-var favButton    = document.getElementById('fav-button');
+// var favButton    = document.createElement('button');
+// favButton.className = 'faves'
 var viewALl      = document.getElementById('view-all');
 var deleteFavs   = document.getElementById('delete-favs');
 var chosenDropDown = document.getElementById('dropdown');
 
+var articleAddToFaves = '';
 
 
     function displayContent(response) {
@@ -18,43 +20,52 @@ var chosenDropDown = document.getElementById('dropdown');
             console.log(articlesArr.length)
 
           var newsCards = document.createElement('div')
-          newsCards.class = 'newsCardsC'
+          newsCards.className = 'newsCardsC'
 
           var authorText = 'Author:' + articlesArr[i].author;
           var authorDiv = document.createElement('div');
-          authorDiv.class= 'authorC';
+          authorDiv.className = 'authorC';
           authorDiv.appendChild(document.createTextNode(authorText));
           newsCards.appendChild(authorDiv);
 
           var descriptionText = 'Description:' + articlesArr[i].description;
           var descriptionDiv = document.createElement('div');
-          descriptionDiv.class= 'descriptionC';
+          descriptionDiv.className = 'descriptionC';
           descriptionDiv.appendChild(document.createTextNode(descriptionText));
           newsCards.appendChild(descriptionDiv);
 
           var titleText = 'Title:' + articlesArr[i].title;
           var titleDiv = document.createElement('div');
-          titleDiv.class ='titleC';
+          titleDiv.className ='titleC';
           titleDiv.appendChild(document.createTextNode(titleText));
           newsCards.appendChild(titleDiv);
 
           var urlText = 'Link:' + articlesArr[i].url;
           var urlDiv = document.createElement('div');
-          urlDiv.class ='urlC';
+          urlDiv.className ='urlC';
           urlDiv.appendChild(document.createTextNode(urlText));
           newsCards.appendChild(urlDiv);
 
-          var urlToImageText = 'Image:' + articlesArr[i].urlToImage;
+          var urlToImageText ='<img class= "picture" src ="' + articlesArr[i].urlToImage + '"/>';
           var urlToImageDiv = document.createElement('div');
-          urlToImageDiv.class ='imageC';
-          urlToImageDiv.appendChild(document.createTextNode(urlToImageText));
+          urlToImageDiv.className ='imageC';
+          urlToImageDiv.innerHTML = urlToImageText
           newsCards.appendChild(urlToImageDiv);
+
+
+          // var favButton    = document.createElement('button');
+          // favButton.className = 'favs'
+          // newsCards.appendChild(favButton)
 
           newsContent.appendChild(newsCards)
 
 
+
+
           }
         }
+
+
 
 //// clicking
   document.getElementById('goButton').addEventListener('click', function () {
@@ -280,4 +291,21 @@ var chosenDropDown = document.getElementById('dropdown');
         })
       }
   });
+
+  document.getElementById('favesButton').addEventListener('click', function() {
+    console.log('faves btn clicked');
+
+    var data = {
+      name: articleAddToFaves
+    };
+    // post:
+    $.ajax({
+      url: url + '/articles/new',
+      method: 'POST',
+      data: data,
+      dataType: 'json'
+    }).done(function(response) {
+      console.log( "response: ", response );
+    }); // end post
+  }); // end add to faves btn
 };
