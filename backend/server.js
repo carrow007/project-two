@@ -17,15 +17,18 @@ app.use(cors());
 // mongoURL
 var url = 'mongodb://localhost:27017/news-app'
 
-mongodb.MongoClient.connect(process.env.MONGO_URI || url, function(err, database) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI || url, function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
   }
-})
-
-mongodb = database;
-console.log("DB connection ready");
+  db = database;
+  console.log("Database connection ready");
+  var server = app.listen(process.env.PORT || 80, function () {
+    var port = server.address().port;
+    console.log("App now running on port", port);
+  });
+});
 
 // if things go wrong (from Syed)
 function handleError(res, reason, message, code) {
@@ -35,7 +38,7 @@ function handleError(res, reason, message, code) {
   })
 }
 
-// GET
+GET
 
 app.get("/articles", function(req, res) {
     // find all articles and return them as an array
@@ -53,7 +56,7 @@ app.get("/articles", function(req, res) {
     var newArticle = req.body;
     newArticle.createData = new Date();
 
-    // insert one new character
+    // insert one new article
     db.collection(ARTICLES_COLLECTION).insertOne(newArticle, function(err, doc) {
       if (err) {
         handleError(res, err.message, "Failed to add new article.");
@@ -92,6 +95,4 @@ app.put("/articles/:title", function(req, res) {
 
 });
 
-app.listen(3000, function(){
-  console.log('listen to events on a "port".')
-});
+

@@ -9,6 +9,7 @@ var deleteFavs   = document.getElementById('delete-favs');
 var chosenDropDown = document.getElementById('dropdown');
 
 var articleAddToFaves = '';
+var url = 'http://localhost:3000';
 
 
     function displayContent(response) {
@@ -298,6 +299,7 @@ var articleAddToFaves = '';
     var data = {
       name: articleAddToFaves
     };
+    console.log(data);
     // post:
     $.ajax({
       url: url + '/articles/new',
