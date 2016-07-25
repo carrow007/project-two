@@ -1,8 +1,10 @@
 
+var PORT       = process.env.PORT || 3000;
 var express    = require("express");
 var bodyParser = require("body-parser");
 var cors       = require("cors");
 var mongodb    = require("mongodb");
+var request    = require("request")
 var ObjectID   = mongodb.ObjectID;
 var app        = express();
 
@@ -24,7 +26,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || url, function (err, datab
   }
   db = database;
   console.log("Database connection ready");
-  var server = app.listen(process.env.PORT || 80, function () {
+  var server = app.listen(process.env.PORT || 3000, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
@@ -38,11 +40,10 @@ function handleError(res, reason, message, code) {
   })
 }
 
-GET
 
 app.get("/articles", function(req, res) {
     // find all articles and return them as an array
-    db.collection(ARTICLE_COLLECTION).find({}).toArray(function(err, docs) {
+    db.collection(ARTICLES_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get location.");
       } else {
@@ -52,12 +53,14 @@ app.get("/articles", function(req, res) {
   });
 
   // save articles to favorites
-  app.post("/articles/new", function(req, res) {
+  app.post("/articles", function(req, res) {
     var newArticle = req.body;
-    newArticle.createData = new Date();
+    newArticle = new Date();
+    console.log(newArticle)
 
     // insert one new article
-    db.collection(ARTICLES_COLLECTION).insertOne(newArticle, function(err, doc) {
+    db.collection(ARTICLES_COLLECTION).insert(newArticle, function(err, doc) {
+      console.log(newArticle)
       if (err) {
         handleError(res, err.message, "Failed to add new article.");
       } else {
@@ -65,34 +68,34 @@ app.get("/articles", function(req, res) {
       };
     });
   });
-// delete by article source
-app.delete("/articles/:author", function(req, res) {
+// // delete by article source
+// app.delete("/articles/:author", function(req, res) {
 
-  db.collection(ARTICLES_COLLECTION).remove({ name: req.params.name }, function(err, result) {
-    if (err) {
-      handleError(res, err.message, "Failed to delete article");
-    } else {
-      res.status(204).end();
-    }
-  });
+//   db.collection(ARTICLES_COLLECTION).remove({ name: req.params.name }, function(err, result) {
+//     if (err) {
+//       handleError(res, err.message, "Failed to delete article");
+//     } else {
+//       res.status(204).end();
+//     }
+//   });
 
-});
+// });
 
-app.put("/articles/:title", function(req, res) {
+// app.put("/articles/:title", function(req, res) {
 
-  //
-  var updateDoc = req.body;
-  delete updateDoc._id;
+//   //
+//   var updateDoc = req.body;
+//   delete updateDoc._id;
 
-  db.collection(ARTICLE_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
-    if (err) {
-      handleError(res, err.message, "Failed to update article");
-    } else {
-      res.status(204).end();
-    }
-  });
+//   db.collection(ARTICLES_COLLECTION).update({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+//     if (err) {
+//       handleError(res, err.message, "Failed to update article");
+//     } else {
+//       res.status(204).end();
+//     }
+//   });
 
 
-});
+// });
 
 
