@@ -54,48 +54,45 @@ app.get("/articles", function(req, res) {
 
   // save articles to favorites
   app.post("/articles", function(req, res) {
-    var newArticle = req.body;
-    newArticle = new Date();
-    console.log(newArticle)
+    var newArticle = {title: req.body.title, date: new Date() };
 
     // insert one new article
     db.collection(ARTICLES_COLLECTION).insert(newArticle, function(err, doc) {
-      console.log(newArticle)
       if (err) {
         handleError(res, err.message, "Failed to add new article.");
       } else {
-        res.status(201).json(doc.ops[0]);
+        res.status(201).json(JSON.stringify(doc));
       };
     });
   });
-// // delete by article source
-// app.delete("/articles/:author", function(req, res) {
+// delete by article source
+app.delete("/articles/:author", function(req, res) {
 
-//   db.collection(ARTICLES_COLLECTION).remove({ name: req.params.name }, function(err, result) {
-//     if (err) {
-//       handleError(res, err.message, "Failed to delete article");
-//     } else {
-//       res.status(204).end();
-//     }
-//   });
+  db.collection(ARTICLES_COLLECTION).remove({ name: req.params.name }, function(err, result) {
+    if (err) {
+      handleError(res, err.message, "Failed to delete article");
+    } else {
+      res.status(204).end();
+    }
+  });
 
-// });
+});
 
-// app.put("/articles/:title", function(req, res) {
+app.put("/articles/:title", function(req, res) {
 
-//   //
-//   var updateDoc = req.body;
-//   delete updateDoc._id;
+  //
+  var updateDoc = req.body;
+  delete updateDoc._id;
 
-//   db.collection(ARTICLES_COLLECTION).update({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
-//     if (err) {
-//       handleError(res, err.message, "Failed to update article");
-//     } else {
-//       res.status(204).end();
-//     }
-//   });
+  db.collection(ARTICLES_COLLECTION).update({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to update article");
+    } else {
+      res.status(204).end();
+    }
+  });
 
 
-// });
+});
 
 
